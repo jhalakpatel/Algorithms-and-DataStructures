@@ -1,0 +1,21 @@
+June 13:
+	1. KMP algo		-- done (with string border and 
+	2. Bellmenford	-- done	
+	3. suffix array for basic pattern maching
+
+	Interview Bit:
+	1. 3 questions	-- done
+
+June 14:
+	1. finish microsoft OTS
+	2. find strongly connected graph
+	3. cycle detection in directed graph
+
+	Interview Bit:
+	1. 3 questions -- done
+
+June 15 : 
+	
+
+June 16 : 
+	

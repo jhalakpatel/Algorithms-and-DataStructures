@@ -1,0 +1,13 @@
+Topological sort uses:
+1. Dependency resolution
+2. Scheduling jobs from the given dependencies among jobs. 
+
+Applications of this type arise in :
+1. Instruction scheduling
+2. Ordering of formula cell evaluation when recomputing formula values in spreadsheets, logic synthesis.
+
+Time Complexity : O(V+E), similar to DFS (af its a DFS with extra stack). V = vertices, E = edges
+
+Space Complexity :
+
+Related Algorithms :

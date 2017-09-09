@@ -1,0 +1,30 @@
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+int main() {
+	//code
+	
+	// counting sort is used the range of items being sorted is 
+	// known -  for here sort lower case alphabets
+	
+	// input
+	string s = "edcab";
+	string out(s.size(),'a');
+	vector<int> count(26,0);
+	for (char c : s) {
+	    count[c-'a']++;
+	}
+	// modify the count to store the absolute index of prev elements
+	for (int i=1; i<26; ++i) {
+		count[i] += count[i-1];
+	}
+	// iterate over the input
+	for (char c: s) {
+	    out[count[c-'a']-1] = c;
+	    count[c-'a']--;
+	}
+	cout << "output " << out << endl;
+	return 0;
+}

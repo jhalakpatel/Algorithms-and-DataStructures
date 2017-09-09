@@ -1,0 +1,99 @@
+#include <iostream>
+using namespace std;
+#include <vector>
+#include <limits>
+#include <array>
+#include <unordered_map>
+#include <functional>
+#include <utility>
+
+
+struct hashKey {
+    int x;
+    int y;
+    int N;
+
+};
+    
+bool operator==(const hashKey& lhs, const hashKey& rhs) {
+        return lhs.x==rhs.x && lhs.y==rhs.y && lhs.N==rhs.N;
+}
+
+struct hashFunc {
+    size_t operator() (const hashKey& key) const {
+        
+            auto h1 = hash<int>{}(key.x);
+            auto h2 = hash<int>{}(key.y);
+            auto h3 = hash<int>{}(key.N);
+            return h1^h2^h3;
+    }
+};
+
+
+int getCount(vector<vector<int>> *keypadptr, int i, int j, int N, unordered_map<hashKey, int, hashFunc> *cacheptr) {
+    
+    vector<vector<int>> &keypad = *keypadptr;
+    
+    unordered_map<hashKey, int, hashFunc> &cache = *cacheptr;
+    
+    
+    // base case
+    if (i<0||j<0||i>=keypad.size()||j>=keypad[0].size()||keypad[i][j]==-1) {
+        return 0;
+    }
+    
+    // either move, in direction or remain at the same position
+    array<array<int, 2>, 4> move = {{{0,1}, {1,0}, {0,-1}, {-1,0}}};
+    
+    
+    // number generated
+    if (N==1) {
+        //cache.emplace(hashKey{i,j,N}, 1);
+        return 1;
+    }
+
+    
+    hashKey key;
+    key.x = i;
+    key.y = j;
+    key.N = N;
+    
+    if (cache.find(key)==cache.end()) {
+        // get the legitimate moves
+        
+        cache[key] = getCount(&keypad, i, j, N-1, &cache);
+        
+        for (int k=0; k<move.size(); ++k) {
+            int next_i = i + move[k][0];
+            int next_j = j + move[k][1];
+            cache[key] += getCount(&keypad, next_i, next_j, N-1, &cache);
+        }
+        
+    }
+    
+    return cache[key];
+}
+
+int main() {
+    vector<vector<int>> keypad = {
+        {1, 2, 3},
+        {4, 5, 6},
+        {7, 8, 9},
+        {-1, 0, -1}
+    };
+    
+    unordered_map<hashKey, int, hashFunc> cache;
+    
+    int ways = 0;
+    int N = 2;
+    
+    for (int i=0; i<keypad.size(); ++i) {
+        for (int j=0; j<keypad[0].size(); ++j) {
+            ways += getCount(&keypad, i, j, 2, &cache);        
+        }
+    }
+    
+    cout << "total ways : "<< ways << endl;
+    
+    return 0;
+}

@@ -1,0 +1,53 @@
+#include <iostream>
+using namespace std;
+#include <vector>
+#include <limits>
+#include <array>
+#include <unordered_map>
+#include <functional>
+#include <utility>
+
+
+int edit_distance(string A, int a, string B, int b) {
+    
+    if (a==0) {
+        return b;
+    } 
+    
+    if (b==0) {
+        return a;
+    }
+    
+    int cost = 0;    
+    if (A[a-1]!=B[b-1]) {
+        // for subs, need to change the digit
+        cost = 1;
+    }
+    
+    // delete the character in A, still have to match with complete B
+    int del = edit_distance(A, a-1, B, b);
+        
+    // insert a matching character in A, one less B to consider
+    int insert = edit_distance(A, a, B, b-1);
+        
+    // substitute the character and match it with B character
+    int subs = edit_distance(A, a-1, B, b-1);
+    
+    // for subs, if they are equal - cost==0, for everything else, step will cost 1
+    return min(min(del,insert)+1, subs+cost);
+
+}
+
+
+int main() {
+
+    
+    string A = "kitten";
+    string B = "sitting";
+    
+    int edits = edit_distance(A, A.size(), B, B.size());
+    
+    cout << "total edits : " << edits << endl;
+    
+    return 0;
+}

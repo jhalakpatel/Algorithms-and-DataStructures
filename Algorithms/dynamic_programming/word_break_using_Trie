@@ -1,0 +1,80 @@
+// there are can be two approaches :
+// 1. using Trie Data Structure
+// 2. using simple dp logic - memoisation 
+
+
+/*
+    using Trie data structure :
+        1. create a Trie Class - TrieNode
+        2. write a insert function
+        3. 
+
+*/
+
+// create a Trie Datastructure
+class Trie {
+    public:
+    bool insert(string word) {
+        // get the root
+        TrieNode *p = root;
+        for (char c : word) {
+            // check if the word exists, if not add it to letters mapping for the root
+            if (p->letters.find(c)==p->letters.end()) {
+                p->letters.emplace(c, new TrieNode());
+            }
+            // get the next TrieNode
+            p = p->letters[c];
+        }
+        int len = word.size();
+        minlen = min(minlen, len);
+        // last word, mark the end of complete word in the dictionary
+        p->isword = true;
+    }
+    
+    bool wordbreak(string word) {
+        bool result = true;
+        TrieNode *p = root;
+        // iterate over the characters in the word
+        int len = word.size();
+        if (len<minlen) return false;
+        for (char c : word) {
+            // get the letter
+            if (p->letters.find(c)==p->letters.end()) {
+                result = false;
+                break;
+            } 
+            
+            if (p->letters[c]->isword) {
+                p = root;
+            } else {
+                p = p->letters[c];
+            }
+        }
+        // if the word is smaller, than the dictionary word
+        return result;
+    }
+    
+    int minlen = numeric_limits<int>::max();
+
+    private:
+    struct TrieNode {
+        bool isword = false;
+        unordered_map<char, TrieNode*> letters;
+    };
+    
+    // create root for the Trie
+    TrieNode *root = new TrieNode();
+};
+
+int Solution::wordBreak(string A, vector<string> &B) {
+    // create instance of Trie class
+    Trie dict;
+    
+    // insert dictionary words in Trie Data Structure
+    for (int i=0; i<B.size(); i++) {
+        dict.insert(B[i]);
+    }
+    
+    // call the wordbreak function to check if its possible to create word from dictionary
+    return dict.wordbreak(A);
+}

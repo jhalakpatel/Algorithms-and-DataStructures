@@ -1,0 +1,3 @@
+Naive Approach:
+1. worstcase : O(2^n) : if LCS = 0
+1. bestcase : O(n), if LCS = string length

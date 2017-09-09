@@ -1,0 +1,36 @@
+#include <iostream>
+#include <vector>
+#include <limits>
+
+using namespace std;
+
+struct Node
+{
+  int cost;
+  vector<Node *> children;
+  Node *parent;
+};
+
+int getCheapestCost(Node *rootNode) {
+  // your code goes here
+    
+  vector<Node*> childVec = rootNode->children;
+  
+  if (childVec.empty()) return (rootNode->cost);
+  
+  
+  int mincost = numeric_limits<int>::max();
+  
+  for (auto itr=childVec.begin(); itr!=childVec.end(); ++itr) {
+    
+    mincost = min(getCheapestCost(*itr), mincost);
+    
+  }
+  
+  return mincost + rootNode->cost;
+  
+}
+
+int main() {
+  return 0;
+}
